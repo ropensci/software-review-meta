@@ -47,5 +47,31 @@ packages
 
 ```{r}
 library("crandb")
-#package("ropenaq", version = "all")
+get_cran_oldest_date <- function(package){
+  results <- try(package(package, version = "all"), silent = TRUE)
+  if(is(results, "try-error")){
+    date <- "9999-01-01 00 00 00"
+  }else{
+    date <- results$versions[[1]]$date
+  }
+  
+  return(date)
+}
+get_cran_oldest_date("ropenaq")
 ```
+
+```{r}
+dates <- purrr::map_chr(packages$package, get_cran_oldest_date)
+dates <- lubridate::ymd_hms(dates)
+packages$cran_submission <- dates
+packages <- dplyr::mutate(packages, 
+                          ropensci_submission = lubridate::as_date(ropensci_submission), 
+                          cran_submission = lubridate::as_date(cran_submission))
+```
+
+
+```{r}
+knitr::kable(packages)
+```
+
+We're looking at `r nrow(packages)` packages. For `r sum(packages$cran_submission < packages$ropensci_submission)` there was a CRAN version before the rOpenSci submission. For `r sum(packages$cran_submission > packages$ropensci_submission)` there wasn't a CRAN version before the rOpenSci submission.
