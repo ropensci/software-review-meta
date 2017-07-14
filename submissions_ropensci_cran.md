@@ -1,32 +1,16 @@
--   [Find onboarded packages](#find-onboarded-packages)
+-   [Find submitted packages](#find-submitted-packages)
+-   [Find the ones that are on CRAN](#find-the-ones-that-are-on-cran)
 
-Find onboarded packages
+Find submitted packages
 =======================
 
 ``` r
-reviews <- readr::read_csv("data/Reviews.csv")
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   id_no = col_integer(),
-    ##   reviewer = col_character(),
-    ##   review_url = col_character(),
-    ##   package = col_character(),
-    ##   onboarding_url = col_character(),
-    ##   review_hours = col_double()
-    ## )
-
-``` r
-reviews <- dplyr::select(reviews, package, onboarding_url) 
-reviews <- unique(reviews)
 library("gh")
 creation <- NULL
 repo <- NULL
 is_ok <- TRUE
 page <- 1
 while(is_ok){
-  print(page)
   issues <- try(gh("/repos/:owner/:repo/issues", owner = "ropensci",
              repo = "onboarding", labels = "package",
              state = "all",
@@ -38,70 +22,39 @@ while(is_ok){
   repo <- c(repo, vapply(issues, "[[", "", "body"))
   }
 }
-```
 
-    ## [1] 1
-
-    ## Warning in if (is_ok) {: la condición tiene longitud > 1 y sólo el primer
-    ## elemento será usado
-
-    ## Warning in while (is_ok) {: la condición tiene longitud > 1 y sólo el
-    ## primer elemento será usado
-
-    ## [1] 2
-
-    ## Warning in if (is_ok) {: la condición tiene longitud > 1 y sólo el primer
-    ## elemento será usado
-
-    ## Warning in if (is_ok) {: la condición tiene longitud > 1 y sólo el primer
-    ## elemento será usado
-
-    ## [1] 3
-
-    ## Warning in if (is_ok) {: la condición tiene longitud > 1 y sólo el primer
-    ## elemento será usado
-
-    ## Warning in if (is_ok) {: la condición tiene longitud > 1 y sólo el primer
-    ## elemento será usado
-
-    ## [1] 4
-
-``` r
 repo <- stringr::str_extract(repo, "Package:.*")
 repo <- stringr::str_replace(repo, "Package: ", "")
-repo <- unique(repo)
-repo <- na.omit(repo)
 ```
 
 ``` r
-repo
+packages <- tibble::tibble(package = repo, 
+                           ropensci_submission = lubridate::ymd_hms(creation))
+
+packages <- unique(packages)
+packages <- dplyr::filter(packages, !is.na(package))
+packages
 ```
 
-    ##  [1] "data.world"         "codemetar"          "rtimicropem"       
-    ##  [4] "bib2df"             "bomrang"            "bittrex"           
-    ##  [7] "RefManageR"         "rrricanes"          "bikedata"          
-    ## [10] "roadoi"             "cyphr"              "gitlabr"           
-    ## [13] "patentsview"        "virustotal"         "ccex"              
-    ## [16] "iheatmapr"          "osmdata"            "cleanEHR"          
-    ## [19] "cmipr"              "rBBS"               "getCRUCLdata"      
-    ## [22] "lingtypology"       "charlatan"          "biomartr"          
-    ## [25] "wordVectors"        "sperrorest"         "visdat"            
-    ## [28] "JSTORr"             "ccafs"              "EML"               
-    ## [31] "GSODR"              "refimpact"          "hddtools"          
-    ## [34] "camsRad"            "rdpla"              "fuse"              
-    ## [37] "rdefra"             "dbhydroR"           "plateR"            
-    ## [40] "getlandsat"         "ezknitr"            "gtfsr"             
-    ## [43] "mregions"           "genbankr"           "monkeylearn"       
-    ## [46] "geoparser"          "tabulizer"          "gutenbergr"        
-    ## [49] "convertr"           "riem"               "opencage"          
-    ## [52] "DoOR.data"          "DoOR.functions"     "tokenizers"        
-    ## [55] "SwissHistMunData"   "rebi"               "rgeospatialquality"
-    ## [58] "osmplotr"           "robotstxt"          "Ropenaq"           
-    ## [61] "assertr"            "rnaturalearth"      "textreuse"         
-    ## [64] "oai"                "rusda"              "rotl"              
-    ## [67] "rsdmx"              "lab.note"           "FedData"           
-    ## [70] "stplanr"            "rrlite"            
-    ## attr(,"na.action")
-    ## [1] 3
-    ## attr(,"class")
-    ## [1] "omit"
+    ## # A tibble: 72 x 2
+    ##        package ropensci_submission
+    ##          <chr>              <dttm>
+    ##  1  data.world 2017-07-10 22:38:52
+    ##  2   codemetar 2017-07-05 23:38:45
+    ##  3 rtimicropem 2017-06-14 11:42:28
+    ##  4      bib2df 2017-06-06 18:59:01
+    ##  5     bomrang 2017-06-03 09:01:11
+    ##  6     bittrex 2017-06-02 20:02:27
+    ##  7  RefManageR 2017-06-02 14:59:34
+    ##  8   rrricanes 2017-06-01 19:17:01
+    ##  9    bikedata 2017-05-31 11:35:20
+    ## 10      roadoi 2017-05-17 16:23:09
+    ## # ... with 62 more rows
+
+Find the ones that are on CRAN
+==============================
+
+``` r
+library("crandb")
+#package("ropenaq", version = "all")
+```

@@ -11,16 +11,12 @@ output:
 # Find submitted packages
 
 ```{r, cache = TRUE, warning = FALSE}
-reviews <- readr::read_csv("data/Reviews.csv")
-reviews <- dplyr::select(reviews, package, onboarding_url) 
-reviews <- unique(reviews)
 library("gh")
 creation <- NULL
 repo <- NULL
 is_ok <- TRUE
 page <- 1
 while(is_ok){
-  print(page)
   issues <- try(gh("/repos/:owner/:repo/issues", owner = "ropensci",
              repo = "onboarding", labels = "package",
              state = "all",
@@ -35,14 +31,15 @@ while(is_ok){
 
 repo <- stringr::str_extract(repo, "Package:.*")
 repo <- stringr::str_replace(repo, "Package: ", "")
-repo <- unique(repo)
-repo <- as.character(na.omit(repo))
 ```
 
 
-```{r}
-packages <- tibble::tibble(repo = repo, 
+```{r, warning = FALSE}
+packages <- tibble::tibble(package = repo, 
                            ropensci_submission = lubridate::ymd_hms(creation))
+
+packages <- unique(packages)
+packages <- dplyr::filter(packages, !is.na(package))
 packages
 ```
 
@@ -50,5 +47,5 @@ packages
 
 ```{r}
 library("crandb")
-package("ropenaq", version = "all")
+#package("ropenaq", version = "all")
 ```
