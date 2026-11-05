@@ -46,7 +46,6 @@ Guest editors start here
 
 - [ ] Invite them to the rOpenSci GitHub organization as member, as a member of the [`editors` team](https://github.com/orgs/ropensci/teams/editors), and also [`stats-editors`](https://github.com/orgs/ropensci/teams/stats-editors) team for stats editors.
   This will give them appropriate permissions, and ensure that they appear in [the editors dashboard](https://dashboard.ropensci.org/editors).
-  - [ ] Request access permission to invite people
   - [ ] Send invitation
   - [ ] Invitation accepted
 
