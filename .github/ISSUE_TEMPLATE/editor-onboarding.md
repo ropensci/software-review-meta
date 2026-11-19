@@ -42,7 +42,9 @@ Full editors start here
 
 Guest editors start here
 
-- [ ] If they haven't already done so as guest editors, request that the new editor turn on [two-factor authentication (2FA) for GitHub](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa).
+- [ ] [Two-factor authentication (2FA) for GitHub](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa).
+  - [ ] Request
+  - [ ] Confirm at [ropensci/people](https://github.com/orgs/ropensci/people) (visible as owner).
 
 - [ ] Invite them to the rOpenSci GitHub organization as member, as a member of the [`editors` team](https://github.com/orgs/ropensci/teams/editors), and also [`stats-editors`](https://github.com/orgs/ropensci/teams/stats-editors) team for stats editors.
   This will give them appropriate permissions, and ensure that they appear in [the editors dashboard](https://dashboard.ropensci.org/editors).
