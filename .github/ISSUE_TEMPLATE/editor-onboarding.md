@@ -53,8 +53,8 @@ Guest editors start here
 
 - [ ] Invite them to the AirTable database of software review (linked in the description of the editors-only channel on Slack).
   Ensure invitation is "Read only".
-  - [ ] Send invitation
-  - [ ] Invitation accepted
+  - [ ] Invite
+  - [ ] Confirm
 
 - [ ] Update the "editor" field in the Airtable ["reviewers-prod" table](https://airtable.com/app8dssb6a7PG6Vwj/tblIBMYXKsF4DwhEW) (this is used to identify and list current editors within this _Dev Guide_) {to Guest}
 
